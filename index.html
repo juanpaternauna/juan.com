@@ -3,315 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡Besitos para Maiia!</title>
+    <title>rialoro 18k | Manillas de Oro Exclusivas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&family=Caveat:wght@700&display=swap');
+        :root {
+            --gold-primary: #D4AF37;
+            --gold-gradient: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+            --dark-bg: #0B0B0B;
+            --card-bg: #141414;
+            --text-light: #F5F5F5;
+            --text-muted: #A0A0A0;
+        }
 
-        body {
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #f5f0ff 0%, #e8dbff 100%);
-            font-family: 'Quicksand', sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Encabezado y Logo */
+        header {
+            background-color: rgba(11, 11, 11, 0.95);
+            padding: 20px 5%;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, rgba(11, 11, 11, 1) 70%);
+        }
+
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--gold-primary);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Catálogo de Productos */
+        .catalog {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 20px 80px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
         }
 
-        .container {
-            text-align: center;
-            position: relative;
-            background: white;
-            padding: 30px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(106, 90, 205, 0.15);
-            max-width: 380px;
-            width: 90%;
-            margin-bottom: 20px;
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+            border-color: var(--gold-primary);
         }
 
-        /* Nube de diálogo de Kuromi */
-        .speech-bubble {
-            position: relative;
-            background: #4a4a4a;
-            color: white;
-            border-radius: 20px;
-            padding: 15px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            animation: float 3s ease-in-out infinite;
-            min-height: 65px;
+        .card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .card-content {
+            padding: 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s;
-        }
-
-        /* Flecha de la nube */
-        .speech-bubble:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border: 15px solid transparent;
-            border-top-color: #4a4a4a;
-            border-bottom: 0;
-            margin-left: -15px;
-            margin-bottom: -15px;
-            transition: border-top-color 0.3s;
-        }
-
-        /* Controles para pasar las razones */
-        .nav-razones {
-            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding: 0 10px;
         }
 
-        .btn-nav {
-            background: #6a5acd;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 3px 10px rgba(106, 90, 205, 0.3);
-            transition: transform 0.2s, background-color 0.2s;
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        .btn-nav:hover {
-            background: #5344b3;
-            transform: scale(1.1);
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
         }
 
-        .contador {
-            font-size: 13px;
-            color: #777;
-            font-weight: bold;
-            background: #f0ebff;
-            padding: 4px 12px;
-            border-radius: 15px;
+        .card-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold-primary);
+            margin-bottom: 15px;
         }
 
-        .kuromi-img {
-            width: 170px;
-            height: auto;
-            margin-bottom: 20px;
-        }
-
-        .btn-beso {
-            background-color: #ff4da6;
-            color: white;
-            border: none;
-            padding: 15px 35px;
-            font-family: 'Fredoka One', cursive;
-            font-size: 18px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 77, 166, 0.4);
-            transition: transform 0.2s, background-color 0.2s;
-            margin-bottom: 20px;
-        }
-
-        .btn-beso:hover {
-            transform: scale(1.05);
-            background-color: #e0358d;
-        }
-
-        .btn-beso:active {
-            transform: scale(0.95);
-        }
-
-        /* Frase bonita */
-        .frase-bonita {
-            font-family: 'Caveat', cursive;
-            font-size: 24px;
-            color: #554477;
-            margin-top: 10px;
-            line-height: 1.2;
-        }
-
-        /* Créditos del autor */
-        .footer-autor {
-            font-size: 12px;
-            color: #7a6b94;
-            font-weight: bold;
-            letter-spacing: 1px;
+        .btn-buy {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background: var(--gold-gradient);
+            color: #000;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 8px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: opacity 0.3s ease;
         }
 
-        .footer-autor span {
-            color: #ff4da6;
+        .btn-buy:hover {
+            opacity: 0.9;
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .kiss-particle {
-            position: fixed;
-            bottom: -50px;
-            font-size: 24px;
-            pointer-events: none;
-            animation: flyUp 3s linear forwards;
-            z-index: 999;
-        }
-
-        @keyframes flyUp {
-            0% {
-                transform: translateY(0) scale(0.5) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-105vh) scale(1.5) rotate(var(--rot));
-                opacity: 0;
-            }
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            color: var(--text-muted);
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Nube con la razón -->
-        <div class="speech-bubble" id="bubble">
-            Cargando razones... 🖤
+    <header>
+        <div class="logo">rialoro 18k</div>
+    </header>
+
+    <section class="hero">
+        <h1>Manillas de Oro 18K</h1>
+        <p>Elegancia, lujo y exclusividad directos a tu alcance.</p>
+    </section>
+
+    <main class="catalog">
+        
+        <div class="card">
+            <img src="https://cdn.discordapp.com/attachments/1514431735847321652/1542152740279422997/Gemini_Generated_Image_q7ldj3q7ldj3q7ld.jpg?ex=6a903129&is=6a8edfa9&hm=a01221c238062202c41905a38c07377577fc1cfbb89bf65f0cf5a91998e00424&" alt="Manilla Tejido Cubano">
+            <div class="card-content">
+                <div>
+                    <h2 class="card-title">Manilla Tejida balines #6</h2>
+                    <p class="card-desc">Oro macizo de 18 Kilates con acabado pulido de alta brillantez.</p>
+                </div>
+                <div>
+                    <div class="card-price">$ 200.000 COP</div>
+                    <a href="#" class="btn-buy" onclick="comprarWhatsApp('Manilla Tejido Cubano', '$ 200.000 COP')">Comprar por WhatsApp</a>
+                </div>
+            </div>
         </div>
 
-        <!-- Controles para cambiar de razón -->
-        <div class="nav-razones">
-            <button class="btn-nav" onclick="cambiarRazon(-1)">◀</button>
-            <span class="contador" id="count">1 / 20</span>
-            <button class="btn-nav" onclick="cambiarRazon(1)">▶</button>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80" alt="Manilla Broche de Seguridad">
+            <div class="card-content">
+                <div>
+                    <h2 class="card-title">Manilla Escalera 18K</h2>
+                    <p class="card-desc">Diseño exclusivo para hombre con broche de caja reforzado.</p>
+                </div>
+                <div>
+                    <div class="card-price">$ 1.950.000 COP</div>
+                    <a href="#" class="btn-buy" onclick="comprarWhatsApp('Manilla Escalera 18K', '$ 1.950.000 COP')">Comprar por WhatsApp</a>
+                </div>
+            </div>
         </div>
 
-        <!-- Imagen de Kuromi -->
-        <img src="https://robnei.net/wp-content/uploads/2025/06/Kuromi-Sentado-Robnei-1024x941.png" alt="Kuromi" class="kuromi-img">
-
-        <br>
-        <button class="btn-beso" onclick="lanzarBesos()">¡Mandarme Besitos! 💋</button>
-
-        <!-- Frase bonita -->
-        <div class="frase-bonita">
-            "De todas las razones, mi favorita siempre será una sonrisa tuya." ✨🖤
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80" alt="Manilla Tejido Chino">
+            <div class="card-content">
+                <div>
+                    <h2 class="card-title">Manilla Tejido Chino</h2>
+                    <p class="card-desc">Estilo clásico y resistente en oro garantizado de 18K.</p>
+                </div>
+                <div>
+                    <div class="card-price">$ 1.400.000 COP</div>
+                    <a href="#" class="btn-buy" onclick="comprarWhatsApp('Manilla Tejido Chino', '$ 1.400.000 COP')">Comprar por WhatsApp</a>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Autor de la página -->
-    <div class="footer-autor">
-        Hecho con <span>♥</span> por Camilo
-    </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 rialoro 18k - Joyería Fina & Calidad Garantizada</p>
+    </footer>
 
     <script>
-        // Las 20 razones para Maiia
-        const razones = [
-            "Deberías mandarme besitos porque soy tu persona favorita (aunque a veces te hagas la ruda). 🖤",
-            "Porque un besito tuyo me alegra todo el día, Maiia. 🥰",
-            "Porque Kuromi dice que es obligatorio por ley darme besitos hoy. ⚖️👑",
-            "Porque combinamos mejor que Kuromi con My Melody. 💖🖤",
-            "Porque te extraño y un besito tuyo lo cura todo. 🩹✨",
-            "Porque soy un amor y me los he ganado por completo. 😏",
-            "Porque si no me mandas besitos, Kuromi se va a enojar y se pondrá a hacer berrinche. 👿",
-            "Porque besarme (aunque sea de lejitos por ahora) es bueno para tu salud. 🩺❤️",
-            "Porque valgo oro y los besitos son mi propina. 🪙✨",
-            "Porque me encanta consentirte y ahora te toca a ti. 💆‍♂️",
-            "Porque tienes los labios más lindos del mundo y hay que aprovecharlos. 👄",
-            "Porque lo digo yo, Kuromi y tu corazón. ¡Ya hazles caso! 💓",
-            "Porque me pones nervioso y la única cura son tus besitos. 🫣",
-            "Porque eres la niña más linda y las niñas lindas mandan besos. 🎀",
-            "Porque no te cuesta nada y a mí me haces inmensamente feliz. 😁",
-            "Porque el día está muy frío y tus besos me quitan el frío. ❄️🔥",
-            "A ver Maiia, ¿necesitas una razón? ¡Simplemente porque me encantas! 🤷‍♂️💕",
-            "Porque cada pequeño beso tuyo hace que te quiera un poquito más. 📈❤️",
-            "Porque me he portado muy bien contigo últimamente (admítelo). 😇",
-            "Porque Kuromi hackeó esta página solo para recordarte que me debes un beso. 💻🖤"
-        ];
+        // CONFIGURA AQUÍ TU NÚMERO DE WHATSAPP (Con código de país, ej: 57 para Colombia)
+        const NUMERO_TELEFONO = "+57 3143171521"; 
 
-        let indiceActual = 0;
-        let bloqueadoPorBeso = false;
-
-        function actualizarNube() {
-            if (bloqueadoPorBeso) return;
-            const nube = document.getElementById('bubble');
-            const contador = document.getElementById('count');
-            
-            nube.innerHTML = `¡Oye Maiia! ${razones[indiceActual]}`;
-            contador.innerText = `${indiceActual + 1} / ${razones.length}`;
-        }
-
-        function cambiarRazon(direccion) {
-            if (bloqueadoPorBeso) return; 
-            
-            indiceActual += direccion;
-            
-            if (indiceActual >= razones.length) {
-                indiceActual = 0;
-            } else if (indiceActual < 0) {
-                indiceActual = razones.length - 1;
-            }
-            
-            actualizarNube();
-        }
-
-        window.onload = actualizarNube;
-
-        function lanzarBesos() {
-            bloqueadoPorBeso = true;
-            const nube = document.getElementById('bubble');
-            
-            nube.innerHTML = "¡Siiiii! ¡Gracias por los besitos, Maiia! Sabía que no te ibas a resistir 🥰🖤";
-            nube.style.backgroundColor = "#ff4da6";
-            
-            const estiloFlecha = document.createElement('style');
-            estiloFlecha.id = 'dynamic-arrow';
-            estiloFlecha.innerHTML = '.speech-bubble:after { border-top-color: #ff4da6 !important; }';
-            document.head.appendChild(estiloFlecha);
-
-            const emojis = ['💋', '❤️', '😘', '💕', '🖤'];
-            for (let i = 0; i < 35; i++) {
-                setTimeout(() => {
-                    const beso = document.createElement('div');
-                    beso.classList.add('kiss-particle');
-                    beso.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-                    beso.style.left = Math.random() * 100 + 'vw';
-                    beso.style.fontSize = Math.random() * (35 - 20) + 20 + 'px';
-                    beso.style.setProperty('--rot', (Math.random() * 360 - 180) + 'deg');
-                    beso.style.animationDuration = Math.random() * (3.5 - 2) + 2 + 's';
-                    
-                    document.body.appendChild(beso);
-                    
-                    setTimeout(() => { beso.remove(); }, 3500);
-                }, i * 80);
-            }
-
-            setTimeout(() => {
-                nube.style.backgroundColor = "#4a4a4a";
-                const estiloAQuitar = document.getElementById('dynamic-arrow');
-                if (estiloAQuitar) estiloAQuitar.remove();
-                
-                bloqueadoPorBeso = false;
-                actualizarNube();
-            }, 5000);
+        function comprarWhatsApp(nombreProducto, precio) {
+            const mensaje = encodeURIComponent(`Hola *rialoro 18k*, estoy interesado en comprar la *${nombreProducto}* por un valor de *${precio}*. ¿Está disponible?`);
+            const url = `https://api.whatsapp.com/message/VHIYQWQK4LC5H1?autoload=1&app_absent=0`;
+            window.open(url, '_blank');
         }
     </script>
-
 </body>
 </html>
-
 
 
