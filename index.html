@@ -331,7 +331,7 @@ function renderMenu(){
     <article class="item">
      <h3>${it[0]}</h3>
      <p>${it[1]||"Preparado al momento."}</p>
-     ${breakfast?`
+     ${si===0?`
      <div class="field">
       <label>¿Cómo deseas los huevos?</label>
       <select id="eggs-${si}-${ii}">
@@ -344,6 +344,27 @@ function renderMenu(){
       <select id="rice-${si}-${ii}">
        <option value="Con arroz">Con arroz</option>
        <option value="Sin arroz">Sin arroz</option>
+      </select>
+     </div>
+     <div class="field">
+      <label>Bebida incluida ($0):</label>
+      <select id="drink-${si}-${ii}">
+       <option value="Sin bebida">Sin bebida</option>
+       <option value="Chocolate negro">Chocolate negro</option>
+       <option value="Chocolate en leche">Chocolate en leche</option>
+       <option value="Tinto">Tinto</option>
+       <option value="Café en leche">Café en leche (Perico)</option>
+      </select>
+     </div>
+     `:""}
+
+     ${(si===4 || si===5)?`
+     <div class="field">
+      <label>Bebida incluida ($0):</label>
+      <select id="drink-${si}-${ii}">
+       <option value="Sin bebida">Sin bebida</option>
+       <option value="Guandolo">Guandolo</option>
+       <option value="Mazamorra">Mazamorra</option>
       </select>
      </div>
      `:""}
@@ -365,7 +386,11 @@ function addItem(si,ii){
  if(si===0){
   const eggs=document.getElementById(`eggs-${si}-${ii}`).value;
   const rice=document.getElementById(`rice-${si}-${ii}`).value;
-  detail=eggs+" / "+rice;
+  const drink=document.getElementById(`drink-${si}-${ii}`).value;
+  detail=eggs+" / "+rice+(drink!=="Sin bebida"?" / Bebida: "+drink:"");
+ }else if(si===4 || si===5){
+  const drink=document.getElementById(`drink-${si}-${ii}`)?.value || "Sin bebida";
+  if(drink!=="Sin bebida") detail="Bebida: "+drink;
  }
  const key=si+"-"+ii+"-"+detail;
  const found=cart.find(x=>x.key===key);
