@@ -2,259 +2,65 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arepas al Carbón LA 92</title>
 
+<!-- Firebase SDKs (Compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
 <style>
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #fff5e9;
-  color: #30231b;
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#fff5e9;color:#30231b}
+header{background:#852e19;color:white;text-align:center;padding:25px 12px}
+header h1{font-size:32px;margin:5px}
+header p{margin:8px}
+.header-buttons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:15px}
+.header-buttons button{padding:12px 18px;border:0;border-radius:9px;font-weight:bold;cursor:pointer}
+.waiter-button{background:#f5bc76;color:#432012}
+.menu-button{background:white;color:#852e19}
+main{max-width:1150px;margin:auto;padding:18px}
+.layout{display:grid;grid-template-columns:1fr 330px;gap:20px;align-items:start}
+.section-head{background:#852e19;color:white;padding:10px 14px;border-radius:9px;margin:22px 0 12px}
+.section-head h2{margin:0;font-size:19px}
+.items{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.item{background:white;padding:14px;border-radius:12px;border:1px solid #ead8c6}
+.item h3{margin:0 0 7px;font-size:15px}
+.item p{font-size:12px;color:#76665c}
+.price{font-weight:bold;color:#852e19}
+.item-bottom{display:flex;justify-content:space-between;align-items:center;gap:5px}
+.add,.primary{background:#852e19;color:white;border:0;padding:10px;border-radius:8px;font-weight:bold;cursor:pointer}
+.field{margin:10px 0}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:5px}
+select,input{width:100%;padding:10px;border:1px solid #d9c6b4;border-radius:8px;background:white}
+.cart{background:white;padding:18px;border-radius:13px;border:1px solid #ead8c6;position:sticky;top:10px}
+.cart h2{margin-top:0}
+.cart-line{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid #eee}
+.cart-line strong{font-size:13px}
+.cart-line small{display:block;color:#777;font-size:12px}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{border:0;background:#f5e4d2;padding:6px 10px;border-radius:6px;cursor:pointer}
+.total{display:flex;justify-content:space-between;font-size:20px;font-weight:bold;margin:15px 0}
+.primary{width:100%;padding:14px}
+.empty{text-align:center;color:#777;padding:20px}
+.note{font-size:12px;color:#777}
+#waiterView{display:none}
+.login,.admin{max-width:750px;margin:25px auto;background:white;padding:20px;border-radius:14px}
+.login{max-width:400px}
+.order{background:#fff8ef;padding:16px;border:1px solid #e4d1bf;border-radius:12px;margin:12px 0}
+.order h3{margin:5px 0}
+.order li{margin:8px 0;font-size:14px}
+.order-actions{display:flex;gap:8px;flex-wrap:wrap}
+.secondary{background:#eee;color:#333;border:0;padding:10px;border-radius:8px;cursor:pointer}
+.status{color:#287b38;font-weight:bold}
+.hidden{display:none!important}
+footer{text-align:center;padding:30px;color:#777}
+@media(max-width:800px){
+  .layout{grid-template-columns:1fr}
+  .cart{position:static;order:-1}
 }
-
-/* Header & Navigation */
-header {
-  background: linear-gradient(135deg, #852e19 0%, #5d1f10 100%);
-  color: white;
-  text-align: center;
-  padding: 30px 15px 25px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-header h1 {
-  font-size: 34px;
-  margin: 0 0 4px 0;
-  letter-spacing: 1px;
-}
-header h2 {
-  font-size: 18px;
-  margin: 0 0 10px 0;
-  color: #f5bc76;
-  font-weight: 600;
-}
-header p {
-  margin: 5px 0 15px;
-  font-size: 14px;
-  opacity: 0.9;
-}
-.header-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
-.header-buttons button {
-  padding: 12px 22px;
-  border: 0;
-  border-radius: 25px;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-.header-buttons button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-.waiter-button { background: #f5bc76; color: #432012; }
-.menu-button { background: #white; color: #852e19; }
-
-/* Layout Structure */
-main { max-width: 1150px; margin: auto; padding: 20px 15px; }
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 24px;
-  align-items: start;
-}
-
-/* Section Titles & Cards */
-.section-head {
-  background: #852e19;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 10px;
-  margin: 24px 0 14px;
-  box-shadow: 0 2px 5px rgba(133,46,25,0.2);
-}
-.section-head h2 { margin: 0; font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-.items {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
-.item {
-  background: white;
-  padding: 16px;
-  border-radius: 14px;
-  border: 1px solid #ead8c6;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.03);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.item h3 { margin: 0 0 6px; font-size: 16px; color: #432012; }
-.item p { font-size: 13px; color: #76665c; margin: 0 0 12px 0; line-height: 1.4; }
-.price { font-weight: bold; color: #852e19; font-size: 16px; }
-
-.item-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.field { margin: 10px 0; }
-label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px; color: #554439; }
-select, input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d9c6b4;
-  border-radius: 8px;
-  background: #faf7f4;
-  font-size: 13px;
-  outline: none;
-  transition: border 0.2s;
-}
-select:focus, input:focus {
-  border-color: #852e19;
-  background: white;
-}
-
-/* Cart Panel */
-.cart {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  border: 1px solid #ead8c6;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-  position: sticky;
-  top: 15px;
-}
-.cart h2 { margin-top: 0; font-size: 20px; color: #852e19; border-bottom: 2px solid #fff5e9; padding-bottom: 10px; }
-.cart-line {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 0;
-  border-bottom: 1px dashed #eee;
-}
-.cart-line strong { font-size: 14px; color: #30231b; }
-.cart-line small { display: block; color: #777; font-size: 12px; margin-top: 2px; }
-
-.qty { display: flex; align-items: center; gap: 8px; }
-.qty button {
-  border: 0;
-  background: #f5e4d2;
-  color: #432012;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.qty button:hover { background: #e8d0b8; }
-
-.total {
-  display: flex;
-  justify-content: space-between;
-  font-size: 22px;
-  font-weight: bold;
-  margin: 20px 0 15px;
-  color: #852e19;
-}
-
-.add, .primary {
-  background: #852e19;
-  color: white;
-  border: 0;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.add:hover, .primary:hover { background: #6a2413; }
-.primary { width: 100%; padding: 14px; font-size: 15px; border-radius: 10px; }
-.empty { text-align: center; color: #99887c; padding: 25px 10px; font-style: italic; }
-.note { font-size: 12px; color: #88776c; text-align: center; margin-top: 12px; }
-
-/* Waiter View & Login */
-#waiterView { display: none; }
-.login, .admin {
-  max-width: 750px;
-  margin: 25px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  border: 1px solid #ead8c6;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-.login { max-width: 380px; }
-.order {
-  background: #fff8ef;
-  padding: 18px;
-  border: 1px solid #e4d1bf;
-  border-radius: 12px;
-  margin: 14px 0;
-}
-.order h3 { margin: 0 0 8px; color: #852e19; display: flex; justify-content: space-between; }
-.order ul { padding-left: 20px; margin: 10px 0; }
-.order li { margin: 6px 0; font-size: 14px; }
-.order-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-.secondary {
-  background: #eee0d3;
-  color: #432012;
-  border: 0;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-}
-.secondary:hover { background: #e0cfc0; }
-.status { font-weight: bold; padding: 4px 8px; border-radius: 6px; font-size: 12px; display: inline-block; }
-.status-nuevo { background: #ffeeba; color: #856404; }
-.status-atendido { background: #d4edda; color: #155724; }
-
-.hidden { display: none !important; }
-
-/* Notification Banner */
-#toast {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #28a745;
-  color: white;
-  padding: 14px 24px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  display: none;
-  z-index: 1000;
-  font-weight: bold;
-}
-
-footer { text-align: center; padding: 35px 15px; color: #88776c; font-size: 14px; }
-
-@media(max-width: 850px) {
-  .layout { grid-template-columns: 1fr; }
-  .cart { position: static; order: -1; }
-}
-@media(max-width: 550px) {
-  .items { grid-template-columns: 1fr; }
+@media(max-width:500px){
+  .items{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -267,8 +73,8 @@ footer { text-align: center; padding: 35px 15px; color: #88776c; font-size: 14px
   <p>¡Bienvenido a nuestro menú digital!</p>
 
   <div class="header-buttons">
-    <button class="menu-button" onclick="showCustomer()">📖 VER MENÚ</button>
-    <button class="waiter-button" onclick="showWaiter()">🔐 ACCESO MESERO</button>
+   <button class="menu-button" onclick="showCustomer()">VER MENÚ</button>
+   <button class="waiter-button" onclick="showWaiter()">🔐 ACCESO MESERO</button>
   </div>
 </header>
 
@@ -276,73 +82,66 @@ footer { text-align: center; padding: 35px 15px; color: #88776c; font-size: 14px
 
 <section id="customerView">
   <div class="layout">
-    <div id="menu"></div>
+   <div id="menu"></div>
 
-    <aside class="cart">
-      <h2>🛒 Mi pedido</h2>
+   <aside class="cart">
+    <h2>🛒 Mi pedido</h2>
 
-      <div class="field">
-        <label>Número de mesa *</label>
-        <input id="tableNo" type="number" min="1" placeholder="Ejemplo: 5">
-      </div>
+    <div class="field">
+     <label>Número de mesa *</label>
+     <input id="tableNo" type="number" min="1" placeholder="Ejemplo: 5">
+    </div>
 
-      <div class="field">
-        <label>Nombre del cliente</label>
-        <input id="customerName" placeholder="Tu nombre">
-      </div>
+    <div class="field">
+     <label>Nombre del cliente</label>
+     <input id="customerName" placeholder="Tu nombre">
+    </div>
 
-      <div id="cartItems">
-        <div class="empty">No tienes productos todavía.</div>
-      </div>
+    <div id="cartItems">
+     <div class="empty">No tienes productos todavía.</div>
+    </div>
 
-      <div class="total">
-        <span>Total:</span>
-        <span id="total">$0</span>
-      </div>
+    <div class="total">
+     <span>Total:</span>
+     <span id="total">$0</span>
+    </div>
 
-      <button class="primary" onclick="placeOrder()">ENVIAR PEDIDO</button>
-      <p class="note">Revisa tu pedido antes de enviarlo.</p>
-    </aside>
+    <button class="primary" id="btnSendOrder" onclick="placeOrder()">ENVIAR PEDIDO</button>
+    <p class="note">Revisa tu pedido antes de enviarlo.</p>
+   </aside>
   </div>
 </section>
 
 <section id="waiterView">
+
   <div id="loginPanel" class="login">
-    <h2>🔐 Panel del mesero</h2>
-    <p>Ingresa tus credenciales para ver los pedidos.</p>
+   <h2>🔐 Panel del mesero</h2>
+   <p>Ingresa tus credenciales para ver los pedidos.</p>
 
-    <div class="field">
-      <label>Usuario</label>
-      <input id="username" placeholder="Usuario">
-    </div>
+   <div class="field">
+    <label>Usuario</label>
+    <input id="username" placeholder="Usuario">
+   </div>
 
-    <div class="field">
-      <label>Contraseña</label>
-      <input id="password" type="password" placeholder="Contraseña">
-    </div>
+   <div class="field">
+    <label>Contraseña</label>
+    <input id="password" type="password" placeholder="Contraseña">
+   </div>
 
-    <button class="primary" onclick="login()">INGRESAR</button>
-    <p id="error" style="color:red; font-size:13px; margin-top:10px;"></p>
-
-    <button class="secondary" style="width:100%; margin-top:10px;" onclick="showCustomer()">
-      VOLVER AL MENÚ
-    </button>
+   <button class="primary" onclick="login()">INGRESAR</button>
+   <p id="error" style="color:red"></p>
+   <button class="secondary" onclick="showCustomer()">VOLVER AL MENÚ</button>
   </div>
 
   <div id="ordersPanel" class="admin hidden">
-    <h2>📋 PEDIDOS RECIBIDOS</h2>
-    <div style="display:flex; gap:10px; margin-bottom:15px;">
-      <button class="secondary" onclick="renderOrders()">🔄 ACTUALIZAR PEDIDOS</button>
-      <button class="secondary" onclick="logout()">CERRAR SESIÓN</button>
-    </div>
-
-    <div id="ordersList"></div>
+   <h2>📋 PEDIDOS DE LOS CLIENTES</h2>
+   <button class="secondary" onclick="logout()">CERRAR SESIÓN</button>
+   <div id="ordersList"></div>
   </div>
+
 </section>
 
 </main>
-
-<div id="toast"></div>
 
 <footer>
   AREPAS AL CARBÓN LA 92<br>
@@ -350,432 +149,421 @@ footer { text-align: center; padding: 35px 15px; color: #88776c; font-size: 14px
 </footer>
 
 <script>
-// --- DATOS DEL MENÚ ---
-const menuData = [
-  {
-    category: "DESAYUNOS",
-    items: [
-      ["Desayuno sencillo", "Huevos al gusto, arroz blanco y arepa con quesito", 11000],
-      ["Calentado sencillo", "Huevos al gusto, calentado y arepa con quesito", 12000],
-      ["Desayuno de la casa", "Huevos al gusto, arroz blanco, carne y arepa con quesito", 14000],
-      ["De la casa res desmechada", "Servido caliente al gusto", 15000],
-      ["De la casa chorizo", "Acompañado de arepa y queso", 17000],
-      ["Calentado con carne", "Huevos al gusto, calentado, carne y arepa con quesito", 14000],
-      ["Calentado res desmechada", "Res desmechada jugosa con calentado", 15000],
-      ["Calentado chorizo", "Chorizo de la casa con calentado", 17000],
-      ["Desayuno ranchero", "Huevos con salchicha, arroz o calentado y arepa", 14000],
-      ["Desayuno americano", "Huevos con maicitos, jamón o tocineta, arroz o calentado", 14000]
-    ]
-  },
-  {
-    category: "BEBIDAS CALIENTES Y FRÍAS",
-    items: [
-      ["Milo pequeño", "", 4000],
-      ["Milo caliente o frío", "", 8000],
-      ["Chocolate negro", "", 3000],
-      ["Chocolate en leche", "", 3000],
-      ["Tinto", "", 1200],
-      ["Perico", "", 1500],
-      ["Aguapanela", "", 2000],
-      ["Aromática", "", 1000],
-      ["Guandolo", "", 2000]
-    ]
-  },
-  {
-    category: "SOPAS",
-    items: [
-      ["Sopa de mondongo", "", 12000],
-      ["Sopa de sancocho", "", 12000],
-      ["Sopa de frijoles", "", 11000],
-      ["Sopa del día", "", 8000],
-      ["Caldo de costilla", "", 12000],
-      ["Caldo", "", 4000]
-    ]
-  },
-  {
-    category: "SOPAS ESPECIALES",
-    items: [
-      ["Mondongo completo", "Sábados. Incluye acompañamientos y bebida.", 18000],
-      ["Sancocho completo", "Domingos. Incluye acompañamientos y bebida.", 18000]
-    ]
-  },
-  {
-    category: "ALMUERZOS CON SOPA",
-    items: [
-      ["Almuerzo del día", "Carne, arroz, ensalada, maduro o arepa y bebida", 15000],
-      ["Almuerzo con res", "", 16000],
-      ["Almuerzo con desmechada", "", 16000],
-      ["Almuerzo con chorizo", "", 18000]
-    ]
-  },
-  {
-    category: "ALMUERZOS SECOS",
-    items: [
-      ["Seco del día", "Carne, arroz, maduro o arepa, ensalada, frijol y bebida", 12000],
-      ["Seco con res", "", 13000],
-      ["Seco con chorizo", "", 14000]
-    ]
-  },
-  {
-    category: "ASADOS Y PICADAS",
-    items: [
-      ["Punta de anca 200 gramos", "Ensalada, papa francesa o papa y queso mozzarella", 28000],
-      ["Solomo 200 gramos", "Ensalada, papa francesa o papa y queso mozzarella", 24000],
-      ["Picada pequeña", "Chorizo, cerdo, pechuga, morcilla y acompañamientos", 40000],
-      ["Picada mediana", "2 chorizos, 2 cerdos, 2 pechugas y acompañamientos", 50000],
-      ["Picada grande", "3 chorizos, 3 cerdos, 3 pechugas y acompañamientos", 60000],
-      ["Chuzo de pollo", "Ensalada y papa francesa o papa y queso mozzarella", 20000],
-      ["Chorizo completo", "Arepa, hogao, guacamole y limón", 13000],
-      ["Choriqueso", "Arepa, mantequilla y quesito", 13000],
-      ["Choriqueso completo", "Arepa, hogao, guacamole y quesito", 16000],
-      ["Patacón mixto desmechada", "Hogao, guacamole y mozzarella", 15000],
-      ["Patacón de pollo desmechado", "", 14000]
-    ]
-  },
-  {
-    category: "JUGOS Y LIMONADAS",
-    items: [
-      ["Jugo natural en agua", "", 7000],
-      ["Jugo natural en leche", "", 8000],
-      ["Limonada", "", 8000],
-      ["Limonada de coco", "", 9000],
-      ["Limonada de cereza", "", 9000]
-    ]
-  },
-  {
-    category: "AREPAS TELITA Y FRITOS",
-    items: [
-      ["Arepa con hogao", "", 4000],
-      ["Arepa con quesito", "", 5000],
-      ["Arepa con guacamole", "", 4000],
-      ["Arepa sola", "", 1000],
-      ["Arepa hogao y guacamole", "", 5000],
-      ["Papa rellena", "", 4500],
-      ["Papa de huevo", "", 5000],
-      ["Palito de queso", "", 2500],
-      ["Pastel de pollo", "", 4500],
-      ["Empanada de arroz", "", 4500],
-      ["Empanada con carne desmechada", "", 5000],
-      ["Arepa con mantequilla", "", 1500]
-    ]
-  },
-  {
-    category: "AREPAS CON CARNE",
-    items: [
-      ["Pollo desmechado", "", 14000],
-      ["Desmechada", "", 15000],
-      ["Mixta", "", 15000],
-      ["Morcilla", "", 5000],
-      ["Huevo", "", 5000],
-      ["Buche", "", 7000],
-      ["Asadura", "", 5000],
-      ["Cerdo, pechuga o chicharrón", "", 9000],
-      ["Res", "", 10000],
-      ["Chorizo", "", 11000],
-      ["Crudo", "", 9000],
-      ["Lengua", "", 9000]
-    ]
-  }
+
+// Configuración Realtime Database de Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyC0NQPkg3Pa8-buPoFKRCBd1yGM_55XVHY",
+  authDomain: "arepas92-42f57.firebaseapp.com",
+  databaseURL: "https://arepas92-42f57-default-rtdb.firebaseio.com",
+  projectId: "arepas92-42f57",
+  storageBucket: "arepas92-42f57.firebasestorage.app",
+  messagingSenderId: "748360053745",
+  appId: "1:748360053745:web:0f200eb641dbe0497b0a50",
+  measurementId: "G-Z6DC7X4HVR"
+};
+
+let db = null;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+} catch (e) {
+  console.error("Error al conectar Firebase:", e);
+}
+
+const menuData=[
+{
+category:"DESAYUNOS",
+items:[
+["Desayuno sencillo","Huevos al gusto, arroz blanco y arepa con quesito",11000],
+["Calentado sencillo","Huevos al gusto, calentado y arepa con quesito",12000],
+["Desayuno de la casa","Huevos al gusto, arroz blanco, carne y arepa con quesito",14000],
+["De la casa res desmechada","",15000],
+["De la casa chorizo","",17000],
+["Calentado con carne","Huevos al gusto, calentado, carne y arepa con quesito",14000],
+["Calentado res desmechada","",15000],
+["Calentado chorizo","",17000],
+["Desayuno ranchero","Huevos con salchicha, arroz o calentado y arepa",14000],
+["Desayuno americano","Huevos con maicitos, jamón o tocineta, arroz o calentado",14000]
+]
+},
+{
+category:"BEBIDAS CALIENTES Y FRÍAS",
+items:[
+["Milo pequeño","",4000],
+["Milo caliente o frío","",8000],
+["Chocolate negro","",3000],
+["Chocolate en leche","",3000],
+["Tinto","",1200],
+["Perico","",1500],
+["Aguapanela","",2000],
+["Aromática","",1000],
+["Guandolo","",2000]
+]
+},
+{
+category:"SOPAS",
+items:[
+["Sopa de mondongo","",12000],
+["Sopa de sancocho","",12000],
+["Sopa de frijoles","",11000],
+["Sopa del día","",8000],
+["Caldo de costilla","",12000],
+["Caldo","",4000]
+]
+},
+{
+category:"SOPAS ESPECIALES",
+items:[
+["Mondongo completo","Sábados. Incluye acompañamientos y bebida.",18000],
+["Sancocho completo","Domingos. Incluye acompañamientos y bebida.",18000]
+]
+},
+{
+category:"ALMUERZOS CON SOPA",
+items:[
+["Almuerzo del día","Carne, arroz, ensalada, maduro o arepa y bebida",15000],
+["Almuerzo con res","",16000],
+["Almuerzo con desmechada","",16000],
+["Almuerzo con chorizo","",18000]
+]
+},
+{
+category:"ALMUERZOS SECOS",
+items:[
+["Seco del día","Carne, arroz, maduro o arepa, ensalada, frijol y bebida",12000],
+["Seco con res","",13000],
+["Seco con chorizo","",14000]
+]
+},
+{
+category:"ASADOS Y PICADAS",
+items:[
+["Punta de anca 200 gramos","Ensalada, papa francesa o papa y queso mozzarella",28000],
+["Solomo 200 gramos","Ensalada, papa francesa o papa y queso mozzarella",24000],
+["Picada pequeña","Chorizo, cerdo, pechuga, morcilla y acompañamientos",40000],
+["Picada mediana","2 chorizos, 2 cerdos, 2 pechugas y acompañamientos",50000],
+["Picada grande","3 chorizos, 3 cerdos, 3 pechugas y acompañamientos",60000],
+["Chuzo de pollo","Ensalada y papa francesa o papa y queso mozzarella",20000],
+["Chorizo completo","Arepa, hogao, guacamole y limón",13000],
+["Choriqueso","Arepa, mantequilla y quesito",13000],
+["Choriqueso completo","Arepa, hogao, guacamole y quesito",16000],
+["Patacón mixto desmechada","Hogao, guacamole y mozzarella",15000],
+["Patacón de pollo desmechado","",14000]
+]
+},
+{
+category:"JUGOS Y LIMONADAS",
+items:[
+["Jugo natural en agua","",7000],
+["Jugo natural en leche","",8000],
+["Limonada","",8000],
+["Limonada de coco","",9000],
+["Limonada de cereza","",9000]
+]
+},
+{
+category:"AREPAS TELITA Y FRITOS",
+items:[
+["Arepa con hogao","",4000],
+["Arepa con quesito","",5000],
+["Arepa con guacamole","",4000],
+["Arepa sola","",1000],
+["Arepa hogao y guacamole","",5000],
+["Papa rellena","",4500],
+["Papa de huevo","",5000],
+["Palito de queso","",2500],
+["Pastel de pollo","",4500],
+["Empanada de arroz","",4500],
+["Empanada con carne desmechada","",5000],
+["Arepa con mantequilla","",1500]
+]
+},
+{
+category:"AREPAS CON CARNE",
+items:[
+["Pollo desmechado","",14000],
+["Desmechada","",15000],
+["Mixta","",15000],
+["Morcilla","",5000],
+["Huevo","",5000],
+["Buche","",7000],
+["Asadura","",5000],
+["Cerdo, pechuga o chicharrón","",9000],
+["Res","",10000],
+["Chorizo","",11000],
+["Crudo","",9000],
+["Lengua","",9000]
+]
+}
 ];
 
-let cart = [];
+let cart=[];
 
-function money(n) {
-  return new Intl.NumberFormat("es-CO", {
-    style: "currency",
-    currency: "COP",
-    maximumFractionDigits: 0
-  }).format(n);
+function money(n){
+ return new Intl.NumberFormat("es-CO",{
+  style:"currency",
+  currency:"COP",
+  maximumFractionDigits:0
+ }).format(n);
 }
 
-function showToast(msg) {
-  const toast = document.getElementById("toast");
-  toast.textContent = msg;
-  toast.style.display = "block";
-  setTimeout(() => { toast.style.display = "none"; }, 3500);
-}
-
-function renderMenu() {
-  const root = document.getElementById("menu");
-  root.innerHTML = menuData.map((section, si) => `
-    <section>
-      <div class="section-head">
-        <h2>${section.category}</h2>
-      </div>
-      <div class="items">
-        ${section.items.map((it, ii) => {
-          const breakfast = si === 0;
-          return `
-          <article class="item">
-            <div>
-              <h3>${it[0]}</h3>
-              <p>${it[1] || "Preparado al momento con ingredientes frescos."}</p>
-            </div>
-            ${breakfast ? `
-            <div class="field">
-              <label>¿Cómo deseas los huevos?</label>
-              <select id="eggs-${si}-${ii}">
-                <option value="Con aliños">Con aliños</option>
-                <option value="Sin aliños">Sin aliños</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>¿Deseas arroz?</label>
-              <select id="rice-${si}-${ii}">
-                <option value="Con arroz">Con arroz</option>
-                <option value="Sin arroz">Sin arroz</option>
-              </select>
-            </div>
-            ` : ""}
-            <div class="item-bottom">
-              <span class="price">${money(it[2])}</span>
-              <button class="add" onclick="addItem(${si},${ii})">+ AGREGAR</button>
-            </div>
-          </article>
-          `;
-        }).join("")}
-      </div>
-    </section>
-  `).join("");
-}
-
-function addItem(si, ii) {
-  const it = menuData[si].items[ii];
-  let detail = "";
-
-  if (si === 0) {
-    const eggs = document.getElementById(`eggs-${si}-${ii}`).value;
-    const rice = document.getElementById(`rice-${si}-${ii}`).value;
-    detail = eggs + " / " + rice;
-  }
-
-  const key = si + "-" + ii + "-" + detail;
-  const found = cart.find(x => x.key === key);
-
-  if (found) {
-    found.qty++;
-  } else {
-    cart.push({
-      key,
-      name: it[0],
-      detail,
-      price: it[2],
-      qty: 1
-    });
-  }
-
-  renderCart();
-  showToast("➕ Producto agregado al pedido");
-}
-
-function changeQty(key, delta) {
-  const item = cart.find(x => x.key === key);
-  if (!item) return;
-
-  item.qty += delta;
-  if (item.qty <= 0) {
-    cart = cart.filter(x => x.key !== key);
-  }
-  renderCart();
-}
-
-function renderCart() {
-  const box = document.getElementById("cartItems");
-  if (cart.length === 0) {
-    box.innerHTML = '<div class="empty">Tu pedido está vacío.</div>';
-    document.getElementById("total").textContent = money(0);
-    return;
-  }
-
-  box.innerHTML = cart.map(x => `
-    <div class="cart-line">
-      <div>
-        <strong>${escapeHtml(x.name)}</strong>
-        ${x.detail ? `<small>${escapeHtml(x.detail)}</small>` : ""}
-        <small>${money(x.price)} c/u</small>
-      </div>
-      <div class="qty">
-        <button onclick="changeQty('${x.key}', -1)">-</button>
-        <b>${x.qty}</b>
-        <button onclick="changeQty('${x.key}', 1)">+</button>
-      </div>
-    </div>
-  `).join("");
-
-  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
-  document.getElementById("total").textContent = money(total);
-}
-
-// --- ALMACENAMIENTO DE PEDIDOS (CON FALLBACK GARANTIZADO) ---
-function getStoredOrders() {
-  try {
-    return JSON.parse(localStorage.getItem("la92_orders") || "[]");
-  } catch(e) {
-    return [];
-  }
-}
-
-function saveStoredOrders(orders) {
-  try {
-    localStorage.setItem("la92_orders", JSON.stringify(orders));
-  } catch(e) {
-    console.error("No se pudo guardar en almacenamiento local", e);
-  }
-}
-
-function placeOrder() {
-  const tableInput = document.getElementById("tableNo");
-  const nameInput = document.getElementById("customerName");
-  const table = tableInput.value.trim();
-
-  if (!table || Number(table) < 1) {
-    alert("Por favor ingresa un número de mesa válido.");
-    tableInput.focus();
-    return;
-  }
-
-  if (cart.length === 0) {
-    alert("Agrega productos a tu pedido antes de enviarlo.");
-    return;
-  }
-
-  const newOrder = {
-    id: Date.now(),
-    table: table,
-    name: nameInput.value.trim(),
-    items: cart.map(x => ({ ...x })),
-    total: cart.reduce((s, x) => s + x.price * x.qty, 0),
-    status: "Nuevo",
-    created: new Date().toLocaleString("es-CO")
-  };
-
-  // Guardado garantizado en memoria/local
-  const currentOrders = getStoredOrders();
-  currentOrders.unshift(newOrder);
-  saveStoredOrders(currentOrders);
-
-  // Limpiar carrito y campos
-  cart = [];
-  renderCart();
-  nameInput.value = "";
-  tableInput.value = "";
-
-  showToast("✅ ¡Pedido enviado a cocina correctamente!");
-  alert("¡Tu pedido ha sido enviado con éxito a la mesa " + table + "!");
-
-  // Si el panel de mesero está visible, re-renderizar
-  if (!document.getElementById("ordersPanel").classList.contains("hidden")) {
-    renderOrders();
-  }
-}
-
-// --- VISTAS Y NAVEGACIÓN ---
-function showCustomer() {
-  document.getElementById("customerView").style.display = "block";
-  document.getElementById("waiterView").style.display = "none";
-}
-
-function showWaiter() {
-  document.getElementById("customerView").style.display = "none";
-  document.getElementById("waiterView").style.display = "block";
-  document.getElementById("loginPanel").classList.remove("hidden");
-  document.getElementById("ordersPanel").classList.add("hidden");
-}
-
-function login() {
-  const user = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
-
-  if (user === "arepas" && pass === "arepas92") {
-    document.getElementById("loginPanel").classList.add("hidden");
-    document.getElementById("ordersPanel").classList.remove("hidden");
-    document.getElementById("error").textContent = "";
-    renderOrders();
-  } else {
-    document.getElementById("error").textContent = "Usuario o contraseña incorrectos.";
-  }
-}
-
-function logout() {
-  document.getElementById("password").value = "";
-  document.getElementById("username").value = "";
-  showWaiter();
-}
-
-function renderOrders() {
-  const orders = getStoredOrders();
-  const root = document.getElementById("ordersList");
-
-  if (orders.length === 0) {
-    root.innerHTML = '<p class="empty">No hay pedidos recibidos todavía.</p>';
-    return;
-  }
-
-  root.innerHTML = orders.map(o => `
-    <article class="order">
-      <h3>
-        <span>🍽️ MESA ${escapeHtml(o.table)}</span>
-        <span class="status ${o.status === 'Atendido' ? 'status-atendido' : 'status-nuevo'}">${escapeHtml(o.status)}</span>
-      </h3>
-
-      <p><strong>Cliente:</strong> ${escapeHtml(o.name || "Sin nombre registrado")}</p>
-      <p style="font-size:12px; color:#777;"><strong>Pedido #:</strong> ${String(o.id).slice(-6)} — ${escapeHtml(o.created)}</p>
-
-      <ul>
-        ${o.items.map(i => `
-          <li>
-            ${i.qty} x <strong>${escapeHtml(i.name)}</strong>
-            ${i.detail ? `<em>(${escapeHtml(i.detail)})</em>` : ""}
-            — ${money(i.price * i.qty)}
-          </li>
-        `).join("")}
-      </ul>
-
-      <h3 style="margin-top:10px;">TOTAL: ${money(o.total)}</h3>
-
-      <div class="order-actions">
-        ${o.status !== "Atendido" ? `
-          <button class="add" onclick="setStatus(${o.id}, 'Atendido')">MARCAR ATENDIDO</button>
-        ` : `
-          <button class="secondary" onclick="setStatus(${o.id}, 'Nuevo')">MARCAR PENDIENTE</button>
-        `}
-        <button class="secondary" style="background:#f8d7da; color:#721c24;" onclick="deleteOrder(${o.id})">ELIMINAR</button>
-      </div>
+function renderMenu(){
+ const root=document.getElementById("menu");
+ root.innerHTML=menuData.map((section,si)=>`
+ <section>
+  <div class="section-head">
+    <h2>${section.category}</h2>
+  </div>
+  <div class="items">
+  ${section.items.map((it,ii)=>{
+    const breakfast=si===0;
+    return `
+    <article class="item">
+     <h3>${it[0]}</h3>
+     <p>${it[1]||"Preparado al momento."}</p>
+     ${breakfast?`
+     <div class="field">
+      <label>¿Cómo deseas los huevos?</label>
+      <select id="eggs-${si}-${ii}">
+       <option value="Con aliños">Con aliños</option>
+       <option value="Sin aliños">Sin aliños</option>
+      </select>
+     </div>
+     <div class="field">
+      <label>¿Deseas arroz?</label>
+      <select id="rice-${si}-${ii}">
+       <option value="Con arroz">Con arroz</option>
+       <option value="Sin arroz">Sin arroz</option>
+      </select>
+     </div>
+     `:""}
+     <div class="item-bottom">
+      <span class="price">${money(it[2])}</span>
+      <button class="add" onclick="addItem(${si},${ii})">+ AGREGAR</button>
+     </div>
     </article>
-  `).join("");
+    `;
+  }).join("")}
+  </div>
+ </section>
+ `).join("");
 }
 
-function setStatus(id, newStatus) {
-  const orders = getStoredOrders();
-  const order = orders.find(x => x.id === id);
-  if (order) {
-    order.status = newStatus;
-    saveStoredOrders(orders);
-    renderOrders();
-  }
+function addItem(si,ii){
+ const it=menuData[si].items[ii];
+ let detail="";
+ if(si===0){
+  const eggs=document.getElementById(`eggs-${si}-${ii}`).value;
+  const rice=document.getElementById(`rice-${si}-${ii}`).value;
+  detail=eggs+" / "+rice;
+ }
+ const key=si+"-"+ii+"-"+detail;
+ const found=cart.find(x=>x.key===key);
+ if(found){
+  found.qty++;
+ }else{
+  cart.push({
+    key,
+    name:it[0],
+    detail,
+    price:it[2],
+    qty:1
+  });
+ }
+ renderCart();
 }
 
-function deleteOrder(id) {
-  if (!confirm("¿Seguro que deseas eliminar este pedido?")) return;
-  const orders = getStoredOrders().filter(x => x.id !== id);
-  saveStoredOrders(orders);
-  renderOrders();
+function changeQty(key,delta){
+ const item=cart.find(x=>x.key===key);
+ if(!item)return;
+ item.qty+=delta;
+ if(item.qty<=0){
+  cart=cart.filter(x=>x.key!==key);
+ }
+ renderCart();
 }
 
-function escapeHtml(s) {
-  return String(s || "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[c]));
+function renderCart(){
+ const box=document.getElementById("cartItems");
+ if(cart.length===0){
+  box.innerHTML='<div class="empty">Tu pedido está vacío.</div>';
+  document.getElementById("total").textContent=money(0);
+  return;
+ }
+ box.innerHTML=cart.map(x=>`
+ <div class="cart-line">
+  <div>
+    <strong>${x.name}</strong>
+    ${x.detail?`<small>${x.detail}</small>`:""}
+    <small>${money(x.price)} cada uno</small>
+  </div>
+  <div class="qty">
+    <button onclick="changeQty('${x.key}',-1)">−</button>
+    <b>${x.qty}</b>
+    <button onclick="changeQty('${x.key}',1)">+</button>
+  </div>
+ </div>
+ `).join("");
+
+ const total=cart.reduce((s,x)=>s+x.price*x.qty,0);
+ document.getElementById("total").textContent=money(total);
 }
 
-// Inicialización
+function placeOrder(){
+ const table=document.getElementById("tableNo").value.trim();
+ if(!table || Number(table)<1){
+  alert("Por favor ingresa el número de mesa.");
+  return;
+ }
+ if(cart.length===0){
+  alert("Agrega productos a tu pedido.");
+  return;
+ }
+
+ const btn = document.getElementById("btnSendOrder");
+ btn.disabled = true;
+ btn.textContent = "ENVIANDO...";
+
+ const orderId = "order_" + Date.now();
+ const order={
+  id: orderId,
+  table,
+  name:document.getElementById("customerName").value.trim() || "Sin nombre",
+  items:cart.map(x=>({...x})),
+  total:cart.reduce((s,x)=>s+x.price*x.qty,0),
+  status:"Nuevo",
+  created: new Date().toLocaleString("es-CO"),
+  timestamp: Date.now()
+ };
+
+ if (db) {
+   db.ref("orders/" + orderId).set(order)
+     .then(() => {
+       alert("¡Pedido enviado a la cocina correctamente!");
+       cart=[];
+       renderCart();
+       document.getElementById("customerName").value="";
+       document.getElementById("tableNo").value="";
+       btn.disabled = false;
+       btn.textContent = "ENVIAR PEDIDO";
+     })
+     .catch(e => {
+       alert("Error al enviar a la nube: " + e.message);
+       btn.disabled = false;
+       btn.textContent = "ENVIAR PEDIDO";
+     });
+ } else {
+   alert("Error: Base de datos no conectada.");
+   btn.disabled = false;
+   btn.textContent = "ENVIAR PEDIDO";
+ }
+}
+
+function showCustomer(){
+ document.getElementById("customerView").style.display="block";
+ document.getElementById("waiterView").style.display="none";
+}
+
+function showWaiter(){
+ document.getElementById("customerView").style.display="none";
+ document.getElementById("waiterView").style.display="block";
+ document.getElementById("loginPanel").classList.remove("hidden");
+ document.getElementById("ordersPanel").classList.add("hidden");
+}
+
+function login(){
+ const user=document.getElementById("username").value;
+ const pass=document.getElementById("password").value;
+ if(user==="arepas" && pass==="arepas92"){
+  document.getElementById("loginPanel").classList.add("hidden");
+  document.getElementById("ordersPanel").classList.remove("hidden");
+  listenOrders();
+ }else{
+  document.getElementById("error").textContent="Usuario o contraseña incorrectos.";
+ }
+}
+
+function logout(){
+ document.getElementById("password").value="";
+ document.getElementById("username").value="";
+ showWaiter();
+}
+
+function listenOrders(){
+ if (db) {
+   db.ref("orders").orderByChild("timestamp").on("value", snapshot => {
+     const orders = [];
+     snapshot.forEach(childSnapshot => {
+       orders.unshift(childSnapshot.val()); // Más recientes primero
+     });
+     renderOrdersList(orders);
+   }, error => {
+     alert("Error al recibir pedidos en vivo: " + error.message);
+   });
+ } else {
+   document.getElementById("ordersList").innerHTML = '<p class="empty">Base de datos no conectada.</p>';
+ }
+}
+
+function renderOrdersList(orders){
+ const root=document.getElementById("ordersList");
+ if(orders.length===0){
+  root.innerHTML='<p class="empty">No hay pedidos todavía.</p>';
+  return;
+ }
+
+ root.innerHTML=orders.map(o=>`
+ <article class="order">
+  <h3>🍽️ MESA ${escapeHtml(o.table)}</h3>
+  <p>Cliente: ${escapeHtml(o.name)}</p>
+  <p>${escapeHtml(o.created)}</p>
+  <ul>
+   ${o.items.map(i=>`
+    <li>
+     ${i.qty} x ${escapeHtml(i.name)}
+     ${i.detail?"("+escapeHtml(i.detail)+")":""}
+     — ${money(i.price*i.qty)}
+    </li>
+   `).join("")}
+  </ul>
+  <h3>TOTAL: ${money(o.total)}</h3>
+  <p class="status">${o.status}</p>
+  <div class="order-actions">
+   ${o.status!=="Atendido"?`
+    <button class="add" onclick="setStatus('${o.id}')">MARCAR ATENDIDO</button>
+   `:""}
+   <button class="secondary" onclick="deleteOrder('${o.id}')">ELIMINAR</button>
+  </div>
+ </article>
+ `).join("");
+}
+
+function setStatus(id){
+ if (db) {
+   db.ref("orders/" + id).update({ status: "Atendido" });
+ }
+}
+
+function deleteOrder(id){
+ if(!confirm("¿Eliminar este pedido?"))return;
+ if (db) {
+   db.ref("orders/" + id).remove();
+ }
+}
+
+function escapeHtml(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
+}
+
 renderMenu();
 renderCart();
-</script>
 
+</script>
 </body>
 </html>
